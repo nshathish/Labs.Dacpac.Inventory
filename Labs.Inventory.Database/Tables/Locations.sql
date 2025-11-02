@@ -10,8 +10,10 @@ CREATE TABLE [dbo].[Locations] (
     [Country] NVARCHAR(100) NULL,
     [IsActive] BIT NOT NULL DEFAULT 1,
     [CreatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
-    );
+);
+GO
 
 CREATE UNIQUE INDEX [IX_Locations_LocationName]
     ON [dbo].[Locations]([LocationName])
-    WHERE [IsActive] = 1;
+WHERE [IsActive] = 1;
+GO

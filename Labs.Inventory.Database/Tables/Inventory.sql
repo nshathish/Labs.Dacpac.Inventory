@@ -11,14 +11,6 @@ CREATE TABLE [dbo].[Inventory] (
     [CreatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [ModifiedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
 
-    CONSTRAINT [FK_Inventory_Products]
-    FOREIGN KEY ([ProductId])
-    REFERENCES [dbo].[Products]([ProductId]),
-
-    CONSTRAINT [FK_Inventory_Locations]
-    FOREIGN KEY ([LocationId])
-    REFERENCES [dbo].[Locations]([LocationId]),
-
     CONSTRAINT [CHK_Inventory_QuantityOnHand]
     CHECK ([QuantityOnHand] >= 0),
 
@@ -27,7 +19,11 @@ CREATE TABLE [dbo].[Inventory] (
 
     CONSTRAINT [UK_Inventory_ProductLocation]
     UNIQUE ([ProductId], [LocationId])
-    );
+);
+GO
 
 CREATE INDEX [IX_Inventory_LocationId] ON [dbo].[Inventory]([LocationId]);
+GO
+
 CREATE INDEX [IX_Inventory_ProductId] ON [dbo].[Inventory]([ProductId]);
+GO

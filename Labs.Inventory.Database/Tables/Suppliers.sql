@@ -13,8 +13,10 @@ CREATE TABLE [dbo].[Suppliers] (
     [IsActive] BIT NOT NULL DEFAULT 1,
     [CreatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [ModifiedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
-    );
+);
+GO
 
 CREATE UNIQUE INDEX [IX_Suppliers_SupplierName]
     ON [dbo].[Suppliers]([SupplierName])
-    WHERE [IsActive] = 1;
+WHERE [IsActive] = 1;
+GO

@@ -17,20 +17,16 @@ CREATE TABLE [dbo].[Products] (
     [CreatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [ModifiedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
 
-    CONSTRAINT [FK_Products_Categories]
-    FOREIGN KEY ([CategoryId])
-    REFERENCES [dbo].[Categories]([CategoryId]),
-
-    CONSTRAINT [FK_Products_Suppliers]
-    FOREIGN KEY ([SupplierId])
-    REFERENCES [dbo].[Suppliers]([SupplierId]),
-
     CONSTRAINT [CHK_Products_UnitPrice]
     CHECK ([UnitPrice] >= 0),
 
     CONSTRAINT [CHK_Products_CostPrice]
     CHECK ([CostPrice] >= 0)
-    );
+);
+GO
 
 CREATE INDEX [IX_Products_CategoryId] ON [dbo].[Products]([CategoryId]);
+GO
+
 CREATE INDEX [IX_Products_SupplierId] ON [dbo].[Products]([SupplierId]);
+GO

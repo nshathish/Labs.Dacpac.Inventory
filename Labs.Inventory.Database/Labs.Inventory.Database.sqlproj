@@ -75,4 +75,7 @@
     <Build Include="Tables\PurchaseOrderItems.sql" />
     <Build Include="Views\vw_InventorySummary.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Pre-Deployment\AddConstraints.sql" />
+  </ItemGroup>
 </Project>

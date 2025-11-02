@@ -11,18 +11,16 @@ CREATE TABLE [dbo].[InventoryTransactions] (
     [TransactionDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [CreatedBy] NVARCHAR(100) NULL,
 
-    CONSTRAINT [FK_InventoryTransactions_Products]
-    FOREIGN KEY ([ProductId])
-    REFERENCES [dbo].[Products]([ProductId]),
-
-    CONSTRAINT [FK_InventoryTransactions_Locations]
-    FOREIGN KEY ([LocationId])
-    REFERENCES [dbo].[Locations]([LocationId]),
-
     CONSTRAINT [CHK_InventoryTransactions_TransactionType]
     CHECK ([TransactionType] IN ('IN', 'OUT', 'ADJUST', 'TRANSFER'))
-    );
+);
+GO
 
 CREATE INDEX [IX_InventoryTransactions_ProductId] ON [dbo].[InventoryTransactions]([ProductId]);
+GO
+
 CREATE INDEX [IX_InventoryTransactions_LocationId] ON [dbo].[InventoryTransactions]([LocationId]);
+GO
+
 CREATE INDEX [IX_InventoryTransactions_TransactionDate] ON [dbo].[InventoryTransactions]([TransactionDate]);
+GO

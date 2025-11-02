@@ -5,13 +5,11 @@
     [ParentCategoryId] INT NULL,
     [IsActive] BIT NOT NULL DEFAULT 1,
     [CreatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-    [ModifiedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
-
-    CONSTRAINT [FK_Categories_ParentCategory]
-    FOREIGN KEY ([ParentCategoryId])
-    REFERENCES [dbo].[Categories]([CategoryId])
-    );
+    [ModifiedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
+GO
 
 CREATE UNIQUE INDEX [IX_Categories_CategoryName]
     ON [dbo].[Categories]([CategoryName])
-    WHERE [IsActive] = 1;
+WHERE [IsActive] = 1;
+GO

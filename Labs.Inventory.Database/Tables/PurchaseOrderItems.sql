@@ -6,13 +6,5 @@ CREATE TABLE [dbo].[PurchaseOrderItems] (
     [QuantityOrdered] INT NOT NULL,
     [QuantityReceived] INT NOT NULL DEFAULT 0,
     [UnitCost] DECIMAL(18,2) NOT NULL,
-    [ReceivedDate] DATETIME2 NULL,
-
-    CONSTRAINT [FK_PurchaseOrderItems_PurchaseOrders]
-    FOREIGN KEY ([PurchaseOrderId])
-    REFERENCES [dbo].[PurchaseOrders]([PurchaseOrderId]),
-
-    CONSTRAINT [FK_PurchaseOrderItems_Products]
-    FOREIGN KEY ([ProductId])
-    REFERENCES [dbo].[Products]([ProductId])
-    );
+    [ReceivedDate] DATETIME2 NULL
+);
