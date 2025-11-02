@@ -61,8 +61,6 @@
     <Folder Include="Stored Procedures" />
     <Folder Include="Functions" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\Pre-Deployment" />
-    <Folder Include="Scripts\Post-Deployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Categories.sql" />
@@ -76,6 +74,6 @@
     <Build Include="Views\vw_InventorySummary.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PreDeploy Include="Scripts\Pre-Deployment\AddConstraints.sql" />
+    <None Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>
