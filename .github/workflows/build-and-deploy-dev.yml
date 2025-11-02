@@ -17,8 +17,8 @@ permissions:
 
 env:
   PROJECT_NAME: Labs.Inventory.Database
-  PROJECT_PATH: Labs.Dacpac.Inventory/Labs.Inventory.Database/Labs.Inventory.Database.sqlproj
-  DACPAC_FILE: Labs.Dacpac.Inventory/Labs.Inventory.Database/bin/Release/Labs.Inventory.Database.dacpac
+  PROJECT_PATH: Labs.Inventory.Database/Labs.Inventory.Database.sqlproj
+  DACPAC_FILE: Labs.Inventory.Database/bin/Release/Labs.Inventory.Database.dacpac
 
 jobs:
   # 🧱 BUILD JOB - Builds DACPAC cross-platform using .NET SDK
