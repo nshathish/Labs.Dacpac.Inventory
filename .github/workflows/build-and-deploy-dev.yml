@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "🚀 Deploying DACPAC to Azure SQL Managed Instance..."
           /usr/local/bin/sqlpackage/sqlpackage /Action:Publish \
-            /SourceFile:"dacpac/Labs.Dacpac.MyDatabase.dacpac" \
+            /SourceFile:"dacpac/Labs.Inventory.Database.dacpac" \
             /TargetConnectionString:"${{ secrets.AZURE_SQL_MI_CONNECTION_STRING }}" \
             /p:BlockOnPossibleDataLoss=true \
             /p:DropObjectsNotInSource=false \
