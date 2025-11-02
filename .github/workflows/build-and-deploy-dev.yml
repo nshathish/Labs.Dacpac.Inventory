@@ -1,0 +1,95 @@
+name: SQL DACPAC CI/CD
+
+on:
+  # 🔹 Run the build (CI) on Pull Requests targeting main
+  pull_request:
+    branches: [main]
+
+  # 🔹 Run the deploy (CD) only when a PR is merged into main
+  push:
+    branches: [main]
+
+  # 🔹 Allow manual triggering (optional)
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write # ✅ allows posting PR comments
+
+env:
+  PROJECT_NAME: Labs.Inventory.Database
+  PROJECT_PATH: Labs.Dacpac.Inventory/Labs.Inventory.Database/Labs.Inventory.Database.sqlproj
+  DACPAC_FILE: Labs.Dacpac.Inventory/Labs.Inventory.Database/bin/Release/Labs.Inventory.Database.dacpac
+
+jobs:
+  # 🧱 BUILD JOB - Builds DACPAC cross-platform using .NET SDK
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore ${{ env.PROJECT_PATH }}
+
+      - name: Build DACPAC project
+        run: msbuild "${{ env.PROJECT_PATH }}" /p:Configuration=Release
+
+      - name: Upload DACPAC artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ env.PROJECT_NAME }}.${{ github.run_id }}
+          path: ${{ env.DACPAC_FILE }}
+
+      # ✅ Post a comment to the PR when build succeeds
+      - name: Post build result as PR comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            ✅ **DACPAC Build Succeeded**
+            - Project: `${{ env.PROJECT_NAME }}`
+            - Commit: `${{ github.sha }}`
+            - Run: [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+  # 🚀 DEPLOY JOB - Runs on Linux to use Azure CLI
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Deploy DACPAC to Azure SQL Managed Instance
+    # only run when it's a push event to main (i.e. PR merged)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download DACPAC artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ env.PROJECT_NAME }}.${{ github.run_id }}
+          path: dacpac
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install sqlpackage
+        run: |
+          echo "Installing sqlpackage..."
+          wget -q -O sqlpackage.zip https://aka.ms/sqlpackage-linux
+          sudo unzip -q sqlpackage.zip -d /usr/local/bin/sqlpackage
+          sudo chmod +x /usr/local/bin/sqlpackage/sqlpackage
+
+      - name: Deploy DACPAC to Azure SQL Managed Instance
+        run: |
+          echo "🚀 Deploying DACPAC to Azure SQL Managed Instance..."
+          /usr/local/bin/sqlpackage/sqlpackage /Action:Publish \
+            /SourceFile:"dacpac/Labs.Dacpac.MyDatabase.dacpac" \
+            /TargetConnectionString:"${{ secrets.AZURE_SQL_MI_CONNECTION_STRING }}" \
+            /p:BlockOnPossibleDataLoss=true \
+            /p:DropObjectsNotInSource=false \
+            /p:VerifyDeployment=true
+
+          echo "✅ DACPAC deployed successfully to SQL Managed Instance"
